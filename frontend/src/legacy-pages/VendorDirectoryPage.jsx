@@ -26,6 +26,8 @@ export default function VendorDirectoryPage({ venuesOnly = false }) {
   const { lang } = useApp();
   const [vendors, setVendors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+  const [loadAttempt, setLoadAttempt] = useState(0);
 
   const category = params.get("category") || (venuesOnly ? "Venue" : "");
   const city = params.get("city") || "";
@@ -41,7 +43,9 @@ export default function VendorDirectoryPage({ venuesOnly = false }) {
   };
 
   useEffect(() => {
+    let active = true;
     setLoading(true);
+    setLoadError(false);
     const q = new URLSearchParams();
     if (category) q.set("category", category);
     if (city) q.set("city", city);
@@ -52,9 +56,22 @@ export default function VendorDirectoryPage({ venuesOnly = false }) {
     if (cb && cb.min) q.set("min_capacity", cb.min);
     if (sort) q.set("sort", sort);
     api.get(`/vendors?${q.toString()}`)
-      .then((r) => setVendors(r.data))
-      .finally(() => setLoading(false));
-  }, [category, city, adat, price, cap, sort]);
+      .then((r) => {
+        if (active) setVendors(r.data);
+      })
+      .catch(() => {
+        if (active) {
+          setVendors([]);
+          setLoadError(true);
+        }
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [category, city, adat, price, cap, sort, loadAttempt]);
 
   const reset = () => setParams(new URLSearchParams(venuesOnly ? { category: "Venue" } : {}));
 
@@ -114,7 +131,12 @@ export default function VendorDirectoryPage({ venuesOnly = false }) {
           {/* RESULTS */}
           <div className="col-span-12 lg:col-span-9">
             <div className="flex items-center justify-between mb-6">
-              <div className="text-sm text-stone-600"><span data-testid="results-count" className="font-medium text-stone-900">{vendors.length}</span> {t(lang, "filter.results")}</div>
+              <div className="text-sm text-stone-600">
+                <span data-testid="results-count" className="font-medium text-stone-900">
+                  {loading ? "…" : loadError ? "—" : vendors.length}
+                </span>{" "}
+                {loading ? "Memuat vendor..." : loadError ? "hasil tidak tersedia" : t(lang, "filter.results")}
+              </div>
               <select
                 data-testid="results-sort"
                 value={sort} onChange={(e) => set("sort", e.target.value)}
@@ -129,6 +151,16 @@ export default function VendorDirectoryPage({ venuesOnly = false }) {
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {[...Array(6)].map((_, i) => <div key={i} className="aspect-[4/5] bg-stone-100 animate-pulse rounded-sm" />)}
+              </div>
+            ) : loadError ? (
+              <div className="py-20 text-center text-stone-600" role="alert">
+                <p>Daftar vendor belum dapat dimuat.</p>
+                <button
+                  type="button"
+                  onClick={() => setLoadAttempt((attempt) => attempt + 1)}
+                  className="mt-3 underline underline-offset-2">
+                  Coba lagi
+                </button>
               </div>
             ) : vendors.length === 0 ? (
               <div className="py-20 text-center text-stone-600">{t(lang, "common.empty")}</div>

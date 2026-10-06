@@ -7,7 +7,9 @@ import { AppProvider } from "@/lib/store";
 
 const HomePage = dynamic(() => import("@/legacy-pages/HomePage"));
 const VendorDirectoryPage = dynamic(() => import("@/legacy-pages/VendorDirectoryPage"));
-const VendorProfilePage = dynamic(() => import("@/legacy-pages/VendorProfilePage"));
+const VendorProfilePage = dynamic<{
+  initialVendor?: Record<string, unknown> | null;
+}>(() => import("@/legacy-pages/VendorProfilePage"));
 const RealWeddingsPage = dynamic(() =>
   import("@/legacy-pages/RealWeddingsPage").then((module) => module.RealWeddingsPage),
 );
@@ -72,14 +74,16 @@ const routeTable: Record<string, ComponentType> = {
   "/signup": SignupPage,
 };
 
-function RouteContent() {
+function RouteContent({ initialVendor }: { initialVendor: Record<string, unknown> | null }) {
   const pathname = usePathname() ?? "/";
   const segments = pathname.split("/").filter(Boolean);
   let Page = routeTable[pathname];
 
   if (!Page && segments.length === 2 && segments[0] === "vendors") {
-    Page = VendorProfilePage;
-  } else if (!Page && segments.length === 2 && segments[0] === "real-weddings") {
+    return <VendorProfilePage key={pathname} initialVendor={initialVendor} />;
+  }
+
+  if (!Page && segments.length === 2 && segments[0] === "real-weddings") {
     Page = RealWeddingDetail;
   } else if (!Page && segments.length === 2 && segments[0] === "u") {
     Page = PublicWeddingSite;
@@ -97,10 +101,14 @@ function RouteContent() {
   return <Page key={pathname} />;
 }
 
-export default function LegacyApplication() {
+export default function LegacyApplication({
+  initialVendor = null,
+}: {
+  initialVendor?: Record<string, unknown> | null;
+}) {
   return (
     <AppProvider>
-      <RouteContent />
+      <RouteContent initialVendor={initialVendor} />
       <AIAssistant />
     </AppProvider>
   );

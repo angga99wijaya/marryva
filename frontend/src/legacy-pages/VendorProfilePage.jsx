@@ -13,23 +13,60 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 
-export default function VendorProfilePage() {
+/** @param {{ initialVendor?: Record<string, unknown> | null }} props */
+export default function VendorProfilePage({ initialVendor = null }) {
   const { id } = useParams();
   const { user } = useApp();
-  const [v, setV] = useState(null);
+  const [v, setV] = useState(initialVendor);
+  const [loadError, setLoadError] = useState(false);
+  const [loadAttempt, setLoadAttempt] = useState(0);
   const [activeImg, setActiveImg] = useState(0);
   const [form, setForm] = useState({ name: "", email: "", phone: "", event_date: "", guest_count: 500, message: "" });
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    api.get(`/vendors/${id}`).then((r) => setV(r.data)).catch(() => toast.error("Vendor tidak ditemukan"));
-  }, [id]);
+    let active = true;
+    api.get(`/vendors/${id}`)
+      .then((r) => {
+        if (active) {
+          setV(r.data);
+          setLoadError(false);
+        }
+      })
+      .catch(() => {
+        if (active && !initialVendor) setLoadError(true);
+      });
+    return () => {
+      active = false;
+    };
+  }, [id, initialVendor, loadAttempt]);
 
   useEffect(() => {
     if (user && v) setForm((f) => ({ ...f, name: user.name, email: user.email }));
   }, [user, v]);
 
-  if (!v) return <Shell><div className="nk-container py-20 text-center text-stone-500">Memuat...</div></Shell>;
+  if (!v) {
+    return (
+      <Shell>
+        <div className="nk-container py-20 text-center text-stone-500" role={loadError ? "alert" : "status"}>
+          {loadError ? (
+            <>
+              <p>Informasi vendor belum dapat dimuat.</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setLoadError(false);
+                  setLoadAttempt((attempt) => attempt + 1);
+                }}
+                className="mt-3 underline underline-offset-2">
+                Coba lagi
+              </button>
+            </>
+          ) : "Memuat informasi vendor..."}
+        </div>
+      </Shell>
+    );
+  }
 
   const submitInquiry = async (e) => {
     e.preventDefault();
