@@ -18,7 +18,7 @@ The Next.js application runs at `http://localhost:3000`. Existing screens use a 
 
 - **Web and API:** Next.js App Router, deployed together on Vercel.
 - Public vendor and real-wedding detail URLs are included in the runtime sitemap; sign-in, sign-up, and non-public detail URLs are marked `noindex`.
-- **Database and auth:** Supabase PostgreSQL and Supabase Auth; Prisma is the application ORM. NikahKita application tables are isolated in the `nikahkita` schema; existing application tables and rows in `public` are preserved. Prisma keeps its migration ledger in the connection's default `public` schema.
+- **Database and auth:** Supabase PostgreSQL and Supabase Auth; Prisma is the application ORM. NikahKita application tables are isolated in the `nikahkita` schema; existing application tables and rows in `public` are preserved. Prisma keeps its migration ledger in the connection's default `public` schema. For Supabase Transaction Pooler URLs on port `6543`, Prisma automatically adds `pgbouncer=true` to avoid named prepared-statement collisions.
 - **Images:** Next Image optimization supports Cloudinary, Cloudflare R2, and the current Unsplash seed images, with AVIF/WebP output and lazy loading.
 - **Search:** PostgreSQL full-text search plus `pg_trgm` is available through `src/lib/vendor-search.ts`.
 - **Vendor contact:** WhatsApp deep links remain the lead path; no internal chat service is required.
