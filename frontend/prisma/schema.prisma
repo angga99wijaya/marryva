@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["nikahkita"]
+}
+
+model UserProfile {
+  id                    String   @id
+  email                 String   @unique
+  authUserId            String?  @unique @map("auth_user_id")
+  name                  String
+  role                  String   @default("couple")
+  city                  String   @default("")
+  weddingDate           String   @default("") @map("wedding_date")
+  language              String   @default("id")
+  passwordResetRequired Boolean  @default(true) @map("password_reset_required")
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  @@map("user_profiles")
+  @@schema("nikahkita")
+}
+
+model Vendor {
+  id          String   @id
+  slug        String   @unique
+  name        String
+  category    String
+  city        String
+  description String   @default("")
+  approved    Boolean  @default(false)
+  priceMin    Int      @default(0) @map("price_min")
+  priceMax    Int      @default(0) @map("price_max")
+  capacityMax Int      @default(0) @map("capacity_max")
+  ratingAvg   Float    @default(0) @map("rating_avg")
+  tier        String   @default("free")
+  tierRank    Int      @default(2) @map("tier_rank")
+  data        Json     @default("{}")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([city, category, approved])
+  @@index([approved, tierRank, ratingAvg(sort: Desc)])
+  @@map("vendors")
+  @@schema("nikahkita")
+}
+
+model LegacyDocument {
+  id         String   @id @default(uuid())
+  collection String
+  legacyId   String   @map("legacy_id")
+  document   Json
+  importedAt DateTime @default(now()) @map("imported_at")
+
+  @@unique([collection, legacyId])
+  @@index([collection])
+  @@map("legacy_documents")
+  @@schema("nikahkita")
+}
+
+model RsvpRateLimit {
+  id              String   @id
+  windowStartedAt DateTime @default(now()) @map("window_started_at")
+  count           Int      @default(0)
+
+  @@index([windowStartedAt])
+  @@map("rsvp_rate_limits")
+  @@schema("nikahkita")
+}

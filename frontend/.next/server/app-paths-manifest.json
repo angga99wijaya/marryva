@@ -1,0 +1,10 @@
+{
+  "/auth/callback/route": "app/auth/callback/route.js",
+  "/robots.txt/route": "app/robots.txt/route.js",
+  "/api/auth/profile/route": "app/api/auth/profile/route.js",
+  "/api/vendors/search/route": "app/api/vendors/search/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/sitemap.xml/route": "app/sitemap.xml/route.js",
+  "/[[...path]]/page": "app/[[...path]]/page.js",
+  "/api/[...path]/route": "app/api/[...path]/route.js"
+}

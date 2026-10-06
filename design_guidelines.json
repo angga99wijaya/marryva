@@ -1,0 +1,105 @@
+{
+  "project_name": "NikahKita - Localized Indonesian WeddingWire Platform",
+  "design_philosophy": {
+    "archetype": "Editorial Heritage & High-End Warmth",
+    "theme_direction": "Monokrom Editorial meets Indonesian Brass & Champagne Warmth. Moves away from tacky AI rose-gold slop into cinematic magazine aesthetics with high contrast typography, warm neutrals, and crisp tactile borders.",
+    "core_principles": [
+      "Editorial First: Cinematic imagery cards with generous ratios, asymmetric editorial headers, and warm ivory/champagne canvas",
+      "Adat Cultural Honor: Explicit, rich visual tags and specialized filtering for Indonesian traditional ceremonies (Sunda Siger, Jawa Paes Ageng, Minang Suntiang, Bali Payas Agung, Batak Frankness, Chinese Teapai, Modern Minimalist)",
+      "WhatsApp-First Frictionless Lead Flow: One-click primary CTA to WhatsApp with pre-filled context (Vendor name, Event Date, City, Guest Count, Package ID)",
+      "Indonesian Financial Transparency: Clear IDR formatting (e.g., Rp 150.000.000) with budget distribution breakdown across traditional vs modern expense categories"
+    ]
+  },
+  "typography": {
+    "font_family_heading": "Cormorant Garamond, Serif",
+    "font_family_body": "Plus Jakarta Sans, sans-serif",
+    "font_family_mono": "JetBrains Mono, monospace",
+    "google_fonts_import": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap",
+    "scale": {
+      "h1_hero": "text-4xl sm:text-5xl lg:text-6xl font-serif font-medium tracking-tight leading-[1.1]",
+      "h2_section": "text-2xl sm:text-3xl lg:text-4xl font-serif font-semibold tracking-tight leading-snug",
+      "h3_card": "text-xl sm:text-2xl font-serif font-medium text-amber-950 dark:text-amber-100",
+      "h4_widget": "text-lg font-sans font-semibold text-stone-900 dark:text-stone-100",
+      "body_lead": "text-base sm:text-lg font-sans font-light text-stone-600 dark:text-stone-300 leading-relaxed",
+      "body_default": "text-sm sm:text-base font-sans font-normal text-stone-700 dark:text-stone-300 leading-normal",
+      "overline_tag": "text-xs font-mono uppercase tracking-[0.2em] font-semibold text-amber-800 dark:text-amber-400"
+    }
+  },
+  "colors": {
+    "light_palette": {
+      "background_canvas": "#FAF8F5",
+      "surface_card": "#FFFFFF",
+      "surface_muted": "#F3EFEA",
+      "border_subtle": "#E6DFD5",
+      "border_accent": "#D4A359",
+      "text_primary": "#1C1917",
+      "text_secondary": "#57534E",
+      "text_muted": "#8C857B",
+      "brand_primary": "#1C1917",
+      "brand_gold": "#9E7B3B",
+      "brand_gold_hover": "#85652D",
+      "brand_accent_sage": "#3F5244",
+      "whatsapp_green": "#16A34A",
+      "whatsapp_hover": "#15803D"
+    },
+    "dark_palette": {
+      "background_canvas": "#0F0D0C",
+      "surface_card": "#181513",
+      "surface_muted": "#24201D",
+      "border_subtle": "#332D28",
+      "border_accent": "#9E7B3B",
+      "text_primary": "#F5F3EF",
+      "text_secondary": "#A8A29E",
+      "text_muted": "#78716C",
+      "brand_primary": "#F5F3EF",
+      "brand_gold": "#C5A059"
+    }
+  },
+  "layout_and_spacing": {
+    "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+    "section_padding": "py-12 sm:py-20 lg:py-24",
+    "card_padding": "p-6 sm:p-8",
+    "grid_gap": "gap-6 sm:gap-8 lg:gap-10",
+    "bento_grid_rules": "Use asymmetric ratios (e.g. col-span-12 lg:col-span-8 vs col-span-12 lg:col-span-4). Avoid uniform equal square grids. Always set padding inside bordered containers to prevent edge collisions."
+  },
+  "interactive_patterns": {
+    "whatsapp_cta": {
+      "button_style": "inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm transition-all duration-200 shadow-sm hover:shadow-md",
+      "behavior": "Opens WhatsApp Web/App directly with localized pre-filled message template in Indonesian."
+    },
+    "dual_language": {
+      "toggle_component": "Supports ID (Bahasa Indonesia) and EN (English) with seamless i18n key switching."
+    },
+    "adat_filter": {
+      "tags": ["Semua Adat", "Jawa (Paes Ageng/Solo)", "Sunda (Siger)", "Bali (Payas Agung)", "Minang (Suntiang)", "Batak (Ulos/Mandailing)", "Chinese (Teapai)", "Modern International"]
+    }
+  },
+  "image_urls": {
+    "hero_wedding": "https://images.unsplash.com/photo-1650377509488-724221735c19?crop=entropy&cs=srgb&fm=jpg&q=85",
+    "adat_ceremony_siren": "https://images.unsplash.com/photo-1650377509428-11e7fe8614a9?crop=entropy&cs=srgb&fm=jpg&q=85",
+    "adat_siraman": "https://images.unsplash.com/photo-1623991614441-2b124385eb63?crop=entropy&cs=srgb&fm=jpg&q=85",
+    "venue_arch_luxury": "https://images.unsplash.com/photo-1724855946379-451f59d45df6?crop=entropy&cs=srgb&fm=jpg&q=85",
+    "venue_garden": "https://images.unsplash.com/photo-1738225734899-30852be7e396?crop=entropy&cs=srgb&fm=jpg&q=85",
+    "wedding_cake": "https://images.unsplash.com/photo-1719512037487-78e399b58a53?crop=entropy&cs=srgb&fm=jpg&q=85",
+    "wedding_banquet": "https://images.unsplash.com/photo-1627818243473-acb731041bd5?crop=entropy&cs=srgb&fm=jpg&q=85"
+  },
+  "testing_and_qa": {
+    "data_testid_convention": "All interactive elements, buttons, inputs, links, tabs, and filters MUST include a role-based kebab-case data-testid attribute.",
+    "examples": [
+      "data-testid=\"hero-search-location-input\"",
+      "data-testid=\"hero-search-category-select\"",
+      "data-testid=\"hero-search-submit-button\"",
+      "data-testid=\"vendor-card-whatsapp-cta\"",
+      "data-testid=\"adat-filter-sunda-button\"",
+      "data-testid=\"planning-budget-total-idr\"",
+      "data-testid=\"nav-language-toggle\""
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Load Google Fonts Cormorant Garamond, Plus Jakarta Sans, and JetBrains Mono in public/index.html or src/index.css",
+    "Ensure all components are built in JS/JSX files (.js / .jsx) as configured in the frontend repository",
+    "Use data-testid attributes on all interactive controls (buttons, modals, tabs, filters, inputs)",
+    "Maintain high contrast text compliance (minimum 4.5:1 ratio for body text)",
+    "Apply the editorial layout and WhatsApp-first lead funnel across all vendor cards and profile detail pages"
+  ]
+}
