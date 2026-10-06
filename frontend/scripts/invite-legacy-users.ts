@@ -11,12 +11,18 @@ function required(name: string) {
   return value;
 }
 
-function requiredSupabaseSecretKey() {
-  const value = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+function requiredSupabaseAuthAdminKey() {
+  const value = process.env.SUPABASE_AUTH_ADMIN_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!value) {
     throw new Error(
-      "Set SUPABASE_SECRET_KEY (preferred) or SUPABASE_SERVICE_ROLE_KEY "
+      "Set SUPABASE_AUTH_ADMIN_KEY to a valid Auth Admin service-role JWT "
       + "before provisioning legacy users.",
+    );
+  }
+  if (value.startsWith("sb_secret_")) {
+    throw new Error(
+      "Supabase Secret API keys are not accepted by the Auth Admin API. "
+      + "Use an active Auth Admin service-role JWT.",
     );
   }
   return value;
@@ -55,7 +61,7 @@ async function main() {
   const dryRun = args.includes("--dry-run");
   const supabase = createClient(
     required("NEXT_PUBLIC_SUPABASE_URL"),
-    requiredSupabaseSecretKey(),
+    requiredSupabaseAuthAdminKey(),
     { auth: { autoRefreshToken: false, persistSession: false } },
   );
   const siteUrl = required("NEXT_PUBLIC_SITE_URL");
