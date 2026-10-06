@@ -10,7 +10,7 @@ import DestinationsCarousel from "@/components/DestinationsCarousel";
 import { api } from "@/lib/api";
 import { ArrowRight, Search, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { optimizeImageUrl } from "@/lib/image-url";
+import { optimizeImageUrl, shouldBypassImageOptimization } from "@/lib/image-url";
 
 const HERO = "https://images.unsplash.com/photo-1650377509488-724221735c19?crop=entropy&cs=srgb&fm=jpg&q=85";
 
@@ -228,6 +228,7 @@ export default function HomePage() {
                     fill
                     sizes="(min-width: 1024px) 67vw, 100vw"
                     quality={65}
+                    unoptimized={shouldBypassImageOptimization(w.cover_image)}
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />

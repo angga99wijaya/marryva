@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { optimizeImageUrl } from "@/lib/image-url";
+import { optimizeImageUrl, shouldBypassImageOptimization } from "@/lib/image-url";
 
 /** @param {{ initialVendor?: Record<string, unknown> | null }} props */
 export default function VendorProfilePage({ initialVendor = null }) {
@@ -102,6 +102,7 @@ Mohon info paket dan ketersediaan ya. Terima kasih.`;
               priority
               sizes="(min-width: 1024px) 60vw, 100vw"
               quality={75}
+              unoptimized={shouldBypassImageOptimization(v.gallery?.[activeImg] || v.cover_image)}
               className="object-cover"
             />
           </div>
@@ -118,6 +119,7 @@ Mohon info paket dan ketersediaan ya. Terima kasih.`;
                   sizes="(min-width: 1024px) 20vw, 25vw"
                   quality={60}
                   loading="lazy"
+                  unoptimized={shouldBypassImageOptimization(img)}
                   className="object-cover"
                 />
               </button>

@@ -7,7 +7,7 @@ import { useApp } from "@/lib/store";
 import { t } from "@/lib/i18n";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
-import { optimizeImageUrl } from "@/lib/image-url";
+import { optimizeImageUrl, shouldBypassImageOptimization } from "@/lib/image-url";
 
 export const VendorCard = ({ vendor, onFavoriteToggle }) => {
   const { lang, user } = useApp();
@@ -40,6 +40,7 @@ export const VendorCard = ({ vendor, onFavoriteToggle }) => {
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           quality={65}
           loading="lazy"
+          unoptimized={shouldBypassImageOptimization(vendor.cover_image)}
           className="object-cover group-hover:scale-105 transition-transform duration-700"
         />
         <div className="absolute top-3 left-3 flex gap-1.5">
