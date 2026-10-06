@@ -21,9 +21,27 @@ export function SigninPage() {
 
   const submit = async (e) => {
     e.preventDefault(); setLoading(true);
-    try { await login(email, password); toast.success("Selamat datang kembali"); nav("/"); }
-    catch { toast.error("Email atau password salah"); }
-    setLoading(false);
+    try {
+      await login(email, password);
+      toast.success("Selamat datang kembali");
+      nav("/");
+    } catch (error) {
+      const message = typeof error?.message === "string" ? error.message : "";
+      if (/legacy api keys? are disabled|invalid api key/i.test(message)) {
+        toast.error("Login belum tersedia: API key Supabase di deployment sudah dinonaktifkan. Administrator perlu memperbarui NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY di Vercel dan melakukan redeploy.");
+      } else if (/invalid login credentials/i.test(message)) {
+        toast.error("Email atau password salah");
+      } else {
+        console.error("Sign-in failed.", {
+          name: error?.name,
+          status: error?.status,
+          code: error?.code,
+        });
+        toast.error("Login gagal. Periksa koneksi dan coba lagi.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const requestPasswordReset = async () => {
