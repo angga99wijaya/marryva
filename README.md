@@ -27,7 +27,7 @@ The Next.js application runs at `http://localhost:3000`. Existing screens use a 
 
 ## Environment
 
-Copy `frontend/.env.example` to `frontend/.env`, then set the Supabase project URL, its public anon key, and the PostgreSQL `DATABASE_URL` before running the app or migrations. Keep service-role keys, database URLs, and MongoDB credentials server-side; never use a `NEXT_PUBLIC_` prefix for secrets. `.env` is git-ignored.
+Copy `frontend/.env.example` to `frontend/.env`, then set the Supabase project URL, its publishable key (preferred; `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`) or legacy anon key (`NEXT_PUBLIC_SUPABASE_ANON_KEY`), and the PostgreSQL `DATABASE_URL` before running the app or migrations. If legacy JWT keys have been disabled, create and use a Supabase publishable key for the browser and server-side user-session clients. Keep Secret API keys, database URLs, and MongoDB credentials server-side; never use a `NEXT_PUBLIC_` prefix for secrets. `.env` is git-ignored.
 
 ## Preserving MongoDB data
 
@@ -59,7 +59,7 @@ Before production cutover, configure the Supabase project and PostgreSQL connect
 
 ## Vercel deployment and cutover
 
-Deploy the Next.js application from the `frontend` directory (set it as the Vercel project Root Directory). Vercel should detect Next.js automatically; run the production build with `yarn build`. Configure these runtime variables in Vercel's Production environment: `DATABASE_URL`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SUPABASE_URL`, and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Do not add MongoDB credentials or the Supabase service-role key to the web runtime; the migration/import and account-provisioning scripts are one-off trusted operations.
+Deploy the Next.js application from the `frontend` directory (set it as the Vercel project Root Directory). Vercel should detect Next.js automatically; run the production build with `yarn build`. Configure these runtime variables in Vercel's Production environment: `DATABASE_URL`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SUPABASE_URL`, and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (or the legacy anon key while still enabled). Add the same public configuration to Preview if preview deployments must exercise Supabase-backed pages and APIs. Do not add Supabase Secret API keys, MongoDB credentials, or other service-role secrets to the browser-facing environment; the migration/import and account-provisioning scripts are one-off trusted operations.
 
 Before assigning `nikahkita.id`, verify a Vercel preview deployment end to end: the home page, `/api/vendors?limit=1`, `/sitemap.xml`, `/auth/callback`, Supabase sign-in/recovery redirects, and public RSVP. Add the exact production callback URL (`https://nikahkita.id/auth/callback`) to Supabase Auth's allowed redirect URLs and configure the production Site URL. Keep the existing site available until those checks pass and a rollback path is ready.
 
