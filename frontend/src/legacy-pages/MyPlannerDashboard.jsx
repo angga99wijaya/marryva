@@ -5,6 +5,7 @@ import DestinationsCarousel from "@/components/DestinationsCarousel";
 import { useApp } from "@/lib/store";
 import { api } from "@/lib/api";
 import { formatIDRFull } from "@/lib/constants";
+import { optimizeImageUrl } from "@/lib/image-url";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import {
@@ -213,7 +214,7 @@ export default function MyPlannerDashboard() {
               <div className="grid grid-cols-2 gap-3">
                 {favorites.slice(0, 4).map((v) => (
                   <Link key={v.id} to={`/vendors/${v.id}`} data-testid={`dashboard-fav-${v.id}`} className="border border-stone-200 bg-white rounded-sm overflow-hidden flex gap-3 hover:border-stone-900 transition-colors">
-                    <img src={v.cover_image} alt={v.name} loading="lazy" decoding="async" className="w-20 h-20 object-cover shrink-0" />
+                    <img src={optimizeImageUrl(v.cover_image, 320, 60)} alt={v.name} loading="lazy" decoding="async" className="w-20 h-20 object-cover shrink-0" />
                     <div className="py-2 pr-3 min-w-0 flex-1">
                       <div className="nk-overline truncate">{v.category}</div>
                       <div className="font-serif text-sm truncate">{v.name}</div>
@@ -268,7 +269,7 @@ export default function MyPlannerDashboard() {
               <div className="space-y-2">
                 {vendors.slice(0, 3).map((v) => (
                   <Link key={v.id} to={`/vendors/${v.id}`} data-testid={`dashboard-rec-${v.id}`} className="flex items-center gap-3 border border-stone-200 bg-white rounded-sm overflow-hidden hover:border-stone-900 transition-colors">
-                    <img src={v.cover_image} alt={v.name} loading="lazy" decoding="async" className="w-16 h-16 object-cover shrink-0" />
+                    <img src={optimizeImageUrl(v.cover_image, 256, 60)} alt={v.name} loading="lazy" decoding="async" className="w-16 h-16 object-cover shrink-0" />
                     <div className="min-w-0 flex-1 pr-3">
                       <div className="text-xs text-stone-500 font-mono uppercase tracking-wider">{v.category}</div>
                       <div className="font-serif text-sm truncate">{v.name}</div>

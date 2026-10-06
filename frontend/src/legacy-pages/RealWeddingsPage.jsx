@@ -4,6 +4,7 @@ import { Shell } from "@/components/Shell";
 import { api } from "@/lib/api";
 import { ADAT } from "@/lib/constants";
 import { useSearchParams } from "react-router-dom";
+import { optimizeImageUrl } from "@/lib/image-url";
 
 export function RealWeddingsPage() {
   const [params, setParams] = useSearchParams();
@@ -31,7 +32,7 @@ export function RealWeddingsPage() {
         <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
           {items.map((w) => (
             <Link key={w.id} to={`/real-weddings/${w.id}`} data-testid={`rw-card-${w.id}`} className="group block break-inside-avoid relative overflow-hidden rounded-sm">
-              <img src={w.cover_image} alt={w.couple_names} loading="lazy" decoding="async" className="w-full group-hover:scale-105 transition-transform duration-700" />
+              <img src={optimizeImageUrl(w.cover_image, 1000, 65)} alt={w.couple_names} loading="lazy" decoding="async" className="w-full group-hover:scale-105 transition-transform duration-700" />
               <div className="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-black/80 via-black/30 to-transparent">
                 <div className="nk-overline !text-amber-200 mb-1">{w.adat} · {w.city} · {w.guest_count} tamu</div>
                 <div className="font-serif text-white italic text-2xl">{w.couple_names}</div>
@@ -59,7 +60,7 @@ export function RealWeddingDetail() {
       <section className="nk-container mt-10 grid grid-cols-12 gap-4">
         {w.gallery?.map((img, i) => (
           <div key={i} className={`${i % 5 === 0 ? "col-span-12 lg:col-span-8" : "col-span-6 lg:col-span-4"} aspect-[4/3] overflow-hidden rounded-sm`}>
-            <img src={img} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" />
+            <img src={optimizeImageUrl(img, 1000, 65)} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" />
           </div>
         ))}
       </section>

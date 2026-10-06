@@ -10,6 +10,7 @@ import DestinationsCarousel from "@/components/DestinationsCarousel";
 import { api } from "@/lib/api";
 import { ArrowRight, Search, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { optimizeImageUrl } from "@/lib/image-url";
 
 const HERO = "https://images.unsplash.com/photo-1650377509488-724221735c19?crop=entropy&cs=srgb&fm=jpg&q=85";
 
@@ -100,11 +101,12 @@ export default function HomePage() {
           <div className="lg:col-span-5 relative fade-up-d2">
             <div className="relative aspect-[4/5] overflow-hidden rounded-sm border border-stone-200">
               <Image
-                src={HERO}
+                src={optimizeImageUrl(HERO, 1600, 75)}
                 alt="Pasangan Indonesia"
                 fill
                 priority
                 sizes="(min-width: 1024px) 42vw, 100vw"
+                quality={75}
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
@@ -157,10 +159,11 @@ export default function HomePage() {
               <Link key={tool.key} to={tool.to} data-testid={tool.tid} className="nk-card group block overflow-hidden">
                 <div className="relative aspect-[16/10] overflow-hidden bg-stone-100">
                   <Image
-                    src={TOOL_IMAGES[tool.key]}
+                    src={optimizeImageUrl(TOOL_IMAGES[tool.key], 1000, 65)}
                     alt={tool.title}
                     fill
                     sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    quality={65}
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
@@ -220,10 +223,11 @@ export default function HomePage() {
               return (
                 <Link key={w.id} to={`/real-weddings/${w.id}`} data-testid={`realwedding-card-${w.id}`} className={`${span} relative overflow-hidden rounded-sm group bg-stone-200`}>
                   <Image
-                    src={w.cover_image}
+                    src={optimizeImageUrl(w.cover_image, 1400, 65)}
                     alt={w.couple_names}
                     fill
                     sizes="(min-width: 1024px) 67vw, 100vw"
+                    quality={65}
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />

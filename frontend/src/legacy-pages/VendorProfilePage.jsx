@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import { optimizeImageUrl } from "@/lib/image-url";
 
 /** @param {{ initialVendor?: Record<string, unknown> | null }} props */
 export default function VendorProfilePage({ initialVendor = null }) {
@@ -95,11 +96,12 @@ Mohon info paket dan ketersediaan ya. Terima kasih.`;
           <div className="relative col-span-12 lg:col-span-8 aspect-[16/10] overflow-hidden rounded-sm bg-stone-200">
             <Image
               data-testid="vendor-hero-image"
-              src={v.gallery?.[activeImg] || v.cover_image}
+              src={optimizeImageUrl(v.gallery?.[activeImg] || v.cover_image, 1600, 75)}
               alt={v.name}
               fill
               priority
               sizes="(min-width: 1024px) 60vw, 100vw"
+              quality={75}
               className="object-cover"
             />
           </div>
@@ -109,7 +111,15 @@ Mohon info paket dan ketersediaan ya. Terima kasih.`;
                 key={i} data-testid={`vendor-gallery-thumb-${i}`}
                 onClick={() => setActiveImg(i)}
                 className={`relative aspect-square overflow-hidden rounded-sm border-2 ${activeImg === i ? "border-stone-900" : "border-transparent"}`}>
-                <Image src={img} alt="" fill sizes="(min-width: 1024px) 20vw, 25vw" className="object-cover" />
+                <Image
+                  src={optimizeImageUrl(img, 480, 60)}
+                  alt=""
+                  fill
+                  sizes="(min-width: 1024px) 20vw, 25vw"
+                  quality={60}
+                  loading="lazy"
+                  className="object-cover"
+                />
               </button>
             ))}
           </div>

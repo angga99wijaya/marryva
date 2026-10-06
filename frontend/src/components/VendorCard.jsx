@@ -7,6 +7,7 @@ import { useApp } from "@/lib/store";
 import { t } from "@/lib/i18n";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
+import { optimizeImageUrl } from "@/lib/image-url";
 
 export const VendorCard = ({ vendor, onFavoriteToggle }) => {
   const { lang, user } = useApp();
@@ -33,10 +34,12 @@ export const VendorCard = ({ vendor, onFavoriteToggle }) => {
     <Link to={`/vendors/${vendor.id}`} data-testid={`vendor-card-${vendor.id}`} className="nk-card group block">
       <div className="relative aspect-[4/3] overflow-hidden bg-stone-100">
         <Image
-          src={vendor.cover_image}
+          src={optimizeImageUrl(vendor.cover_image, 1200, 65)}
           alt={vendor.name}
           fill
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          quality={65}
+          loading="lazy"
           className="object-cover group-hover:scale-105 transition-transform duration-700"
         />
         <div className="absolute top-3 left-3 flex gap-1.5">

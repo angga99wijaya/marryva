@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { Plus, Trash2, Copy, ExternalLink, Lock, Heart, Calendar, MapPin } from "lucide-react";
 import { formatIDRFull } from "@/lib/constants";
+import { optimizeImageUrl } from "@/lib/image-url";
 
 const TEMPLATES = [
   { key: "jawa", name: "Jawa Klasik", accent: "#8B2E2A", bg: "#F5EDE4", font: "font-serif", preview: "https://images.unsplash.com/photo-1623991614441-2b124385eb63?crop=entropy&cs=srgb&fm=jpg&q=85" },
@@ -94,10 +95,11 @@ export function WebsiteBuilderPage() {
                 className={`relative rounded-sm overflow-hidden border-2 transition-all ${site.template === t.key ? "border-stone-900 ring-2 ring-amber-700/40" : "border-stone-200 hover:border-stone-400"}`}>
                 <div className="relative aspect-[3/4] overflow-hidden">
                   <Image
-                    src={t.preview}
+                    src={optimizeImageUrl(t.preview, 640, 60)}
                     alt={t.name}
                     fill
                     sizes="(min-width: 1024px) 14vw, (min-width: 640px) 30vw, 50vw"
+                    quality={60}
                     className="object-cover"
                   />
                 </div>
@@ -181,7 +183,7 @@ function WeddingSitePreview({ site }) {
   return (
     <div className="border border-stone-200 rounded-sm overflow-hidden" style={{ background: tpl.bg }}>
       <div className="relative aspect-[3/4]">
-        {site.cover_image && <img src={site.cover_image} alt="" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" />}
+        {site.cover_image && <img src={optimizeImageUrl(site.cover_image, 1000, 65)} alt="" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" />}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
         <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
           <div className="font-mono text-[11px] uppercase tracking-[0.3em] mb-2" style={{ color: tpl.accent }}>The Wedding of</div>
@@ -251,7 +253,7 @@ export function PublicWeddingSite() {
     <div style={{ background: tpl.bg }} className="min-h-screen">
       {/* COVER */}
       <section className="relative min-h-screen flex items-end">
-        <img src={data.cover_image} alt="" fetchPriority="high" decoding="async" className="absolute inset-0 w-full h-full object-cover" />
+        <img src={optimizeImageUrl(data.cover_image, 1800, 75)} alt="" fetchPriority="high" decoding="async" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
         <div className="relative z-10 max-w-3xl mx-auto px-6 pb-16 text-center text-white w-full">
           <div className="font-mono text-xs uppercase tracking-[0.4em] mb-3" style={{ color: "#f4d1a3" }}>The Wedding of</div>
@@ -318,7 +320,7 @@ export function PublicWeddingSite() {
           <div className="text-center font-mono text-[11px] uppercase tracking-[0.3em] mb-6" style={{ color: tpl.accent }}>Galeri</div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {data.gallery.map((g, i) => (
-              <div key={i} className="aspect-square overflow-hidden rounded-sm"><img src={g} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" /></div>
+              <div key={i} className="aspect-square overflow-hidden rounded-sm"><img src={optimizeImageUrl(g, 800, 65)} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" /></div>
             ))}
           </div>
         </section>

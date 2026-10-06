@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import { useApp } from "@/lib/store";
 import { DESTINATIONS } from "@/lib/destinations";
+import { optimizeImageUrl } from "@/lib/image-url";
 
 export default function DestinationsCarousel() {
   const { lang } = useApp();
@@ -53,10 +54,11 @@ export default function DestinationsCarousel() {
               className="shrink-0 snap-start w-[260px] sm:w-[300px] group">
               <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-stone-200">
                 <Image
-                  src={d.image}
+                  src={optimizeImageUrl(d.image, 640, 65)}
                   alt={d.name}
                   fill
                   sizes="(min-width: 640px) 300px, 260px"
+                  quality={65}
                   className="object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />

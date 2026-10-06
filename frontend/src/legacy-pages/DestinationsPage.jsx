@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Shell } from "@/components/Shell";
 import { DESTINATIONS } from "@/lib/destinations";
 import { MapPin, ArrowUpRight } from "lucide-react";
+import { optimizeImageUrl } from "@/lib/image-url";
 
 export default function DestinationsPage() {
   return (
@@ -22,10 +23,11 @@ export default function DestinationsPage() {
               className="group block">
               <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-stone-200">
                 <Image
-                  src={d.image}
+                  src={optimizeImageUrl(d.image, 1000, 65)}
                   alt={d.name}
                   fill
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  quality={65}
                   className="object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
