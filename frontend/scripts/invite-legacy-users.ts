@@ -11,6 +11,17 @@ function required(name: string) {
   return value;
 }
 
+function requiredSupabaseSecretKey() {
+  const value = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!value) {
+    throw new Error(
+      "Set SUPABASE_SECRET_KEY (preferred) or SUPABASE_SERVICE_ROLE_KEY "
+      + "before provisioning legacy users.",
+    );
+  }
+  return value;
+}
+
 function isTransientDatabaseError(error: unknown): boolean {
   if (error instanceof Prisma.PrismaClientInitializationError) {
     return /Can't reach database server|Server has closed the connection/.test(error.message);
@@ -44,7 +55,7 @@ async function main() {
   const dryRun = args.includes("--dry-run");
   const supabase = createClient(
     required("NEXT_PUBLIC_SUPABASE_URL"),
-    required("SUPABASE_SERVICE_ROLE_KEY"),
+    requiredSupabaseSecretKey(),
     { auth: { autoRefreshToken: false, persistSession: false } },
   );
   const siteUrl = required("NEXT_PUBLIC_SITE_URL");
