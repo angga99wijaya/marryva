@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import { createHash, randomUUID } from "node:crypto";
 import { MongoClient, ObjectId } from "mongodb";
 import { Prisma, PrismaClient } from "@prisma/client";
+import { getPrismaDatasourceUrl } from "../src/lib/prisma-datasource-url";
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
@@ -47,7 +48,11 @@ function getLegacyId(document: Record<string, unknown>): string {
 
 async function main() {
   const mongo = new MongoClient(requiredEnvironmentValue(mongoUri, "MONGODB_URI"));
-  const prisma = apply ? new PrismaClient() : undefined;
+  const prisma = apply
+    ? new PrismaClient({
+      datasources: { db: { url: getPrismaDatasourceUrl() } },
+    })
+    : undefined;
 
   try {
     await mongo.connect();
