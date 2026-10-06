@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import { createClient } from "@supabase/supabase-js";
 import { Prisma, PrismaClient } from "@prisma/client";
+import { getPrismaDatasourceUrl } from "../src/lib/prisma-datasource-url";
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
@@ -67,7 +68,9 @@ async function main() {
   const siteUrl = required("NEXT_PUBLIC_SITE_URL");
   const redirect = new URL("/auth/callback", siteUrl);
   redirect.searchParams.set("next", "/signin?reset=complete");
-  const prisma = new PrismaClient();
+  const prisma = new PrismaClient({
+    datasources: { db: { url: getPrismaDatasourceUrl() } },
+  });
   let invited = 0;
   let linked = 0;
 

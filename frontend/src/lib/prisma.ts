@@ -1,21 +1,14 @@
 import { PrismaClient } from "@prisma/client";
+import { getPrismaDatasourceUrl } from "@/lib/prisma-datasource-url";
 
 const globalForPrisma = globalThis as typeof globalThis & {
   prisma?: PrismaClient;
 };
 
-const databaseUrl = process.env.DATABASE_URL;
-if (!databaseUrl) throw new Error("Set DATABASE_URL before starting the application.");
-
-const datasourceUrl = new URL(databaseUrl);
-if (datasourceUrl.port === "6543") {
-  datasourceUrl.searchParams.set("pgbouncer", "true");
-}
-
 export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
-    datasources: { db: { url: datasourceUrl.toString() } },
+    datasources: { db: { url: getPrismaDatasourceUrl() } },
     log: process.env.NODE_ENV === "development" ? ["warn", "error"] : ["error"],
   });
 
