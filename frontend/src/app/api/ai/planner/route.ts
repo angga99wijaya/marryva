@@ -95,7 +95,8 @@ export async function POST(request: Request) {
   try {
     const contents = `Konteks pernikahan:\n${weddingContext}\n\nPertanyaan:\n${prompt.trim()}`;
     let response = await requestGemini(configuredModel, apiKey, contents);
-    if (response.status === 404 && configuredModel !== DEFAULT_MODEL) {
+    if ((response.status === 404 || response.status === 503) && configuredModel !== DEFAULT_MODEL) {
+      await response.body?.cancel();
       response = await requestGemini(DEFAULT_MODEL, apiKey, contents);
     }
 
