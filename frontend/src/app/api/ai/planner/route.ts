@@ -118,10 +118,15 @@ export async function POST(request: Request) {
             ? "model_not_found"
             : response.status === 400
               ? "invalid_request"
+              : response.status >= 500
+                ? "provider_unavailable"
               : "provider_error";
       console.error("Gemini request failed.", { status: response.status, code });
       const status = code === "invalid_api_key" || code === "api_key_forbidden" ? 503 : 502;
-      return NextResponse.json({ error: "AI Planner request failed.", code }, { status });
+      return NextResponse.json(
+        { error: "AI Planner request failed.", code, providerStatus: response.status },
+        { status },
+      );
     }
 
     const result: unknown = await response.json();

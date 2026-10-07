@@ -39,6 +39,13 @@ export default function AIAssistant() {
         setError("Gemini tidak menghasilkan jawaban untuk pertanyaan ini. Coba susun ulang pertanyaannya.");
       } else if (code === "provider_timeout" || code === "provider_unavailable") {
         setError("Gemini sementara tidak merespons. Coba lagi beberapa saat.");
+      } else if (code === "provider_error") {
+        const providerStatus = requestError.response?.data?.providerStatus;
+        setError(
+          Number.isInteger(providerStatus)
+            ? `Gemini menolak permintaan (HTTP ${providerStatus}). Periksa pembatasan API key dan Function Logs deployment Vercel.`
+            : "Gemini menolak permintaan. Periksa konfigurasi API key dan Function Logs deployment Vercel.",
+        );
       } else if (status === 401) {
         setError("Silakan masuk untuk menggunakan AI Planner.");
       } else if (status === 503) {
