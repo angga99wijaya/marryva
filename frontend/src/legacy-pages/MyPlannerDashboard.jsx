@@ -255,8 +255,8 @@ export default function MyPlannerDashboard() {
               <Sparkles className="w-4 h-4 text-amber-800" />
               <div className="nk-overline">AI Planner</div>
             </div>
-            <div className="font-serif text-xl mt-2 text-stone-900">Segera hadir</div>
-            <p className="text-sm text-stone-700 mt-1">AI Planner belum tersedia karena layanan AI belum dikonfigurasi.</p>
+            <div className="font-serif text-xl mt-2 text-stone-900">Butuh ide atau saran?</div>
+            <p className="text-sm text-stone-700 mt-1">Buka tombol AI Planner di kanan bawah untuk mendapatkan saran checklist, anggaran, dan persiapan pernikahan.</p>
           </div>
 
           {/* Recommended vendors by city */}
