@@ -81,7 +81,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "AI Planner is not configured." }, { status: 503 });
   }
 
-  const configuredModel = process.env.GEMINI_MODEL?.trim().replace(/^models\//, "") || DEFAULT_MODEL;
+  const configuredModel = (
+    process.env.GEMINI_GENERATION_MODEL?.trim()
+    || process.env.GEMINI_MODEL?.trim()
+    || DEFAULT_MODEL
+  ).replace(/^models\//, "");
   const weddingContext = [
     `Nama pengguna: ${user.name.slice(0, 160)}`,
     `Kota: ${user.city.slice(0, 120) || "belum ditentukan"}`,
