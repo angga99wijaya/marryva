@@ -5,6 +5,7 @@ export const runtime = "nodejs";
 
 const MAX_PROMPT_LENGTH = 2000;
 const DEFAULT_MODEL = "gemini-2.5-flash";
+const PREFERRED_MODELS = [DEFAULT_MODEL, "gemini-2.5-flash-lite", "gemini-2.5-pro"];
 
 function getProviderCode(providerError: unknown): string | undefined {
   if (!providerError || typeof providerError !== "object") return undefined;
@@ -48,6 +49,41 @@ async function requestGemini(model: string, apiKey: string, contents: string): P
       signal: AbortSignal.timeout(25_000),
     },
   );
+}
+
+async function listGenerationModels(apiKey: string): Promise<string[]> {
+  const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models", {
+    headers: { "x-goog-api-key": apiKey },
+    signal: AbortSignal.timeout(10_000),
+  });
+  if (!response.ok) {
+    console.error("Gemini model discovery failed.", { status: response.status });
+    return [];
+  }
+
+  const result: unknown = await response.json();
+  const models = (result as {
+    models?: Array<{ name?: unknown; supportedGenerationMethods?: unknown }>;
+  }).models;
+  if (!Array.isArray(models)) return [];
+
+  return models
+    .filter((model) => {
+      if (typeof model.name !== "string" || !model.name.startsWith("models/gemini-")) return false;
+      if (!Array.isArray(model.supportedGenerationMethods)) return false;
+      if (!model.supportedGenerationMethods.includes("generateContent")) return false;
+      return !/(image|tts|live|embedding|robotics|computer-use)/i.test(model.name);
+    })
+    .map((model) => (model.name as string).replace(/^models\//, ""))
+    .sort((a, b) => {
+      const aPriority = PREFERRED_MODELS.indexOf(a);
+      const bPriority = PREFERRED_MODELS.indexOf(b);
+      if (aPriority >= 0 || bPriority >= 0) {
+        return (aPriority < 0 ? Number.MAX_SAFE_INTEGER : aPriority)
+          - (bPriority < 0 ? Number.MAX_SAFE_INTEGER : bPriority);
+      }
+      return a.localeCompare(b);
+    });
 }
 
 export async function POST(request: Request) {
@@ -95,9 +131,28 @@ export async function POST(request: Request) {
   try {
     const contents = `Konteks pernikahan:\n${weddingContext}\n\nPertanyaan:\n${prompt.trim()}`;
     let response = await requestGemini(configuredModel, apiKey, contents);
-    if ((response.status === 404 || response.status === 503) && configuredModel !== DEFAULT_MODEL) {
+    if (response.status === 404 || response.status === 503) {
+      const initialStatus = response.status;
       await response.body?.cancel();
-      response = await requestGemini(DEFAULT_MODEL, apiKey, contents);
+      const fallbackModels = (await listGenerationModels(apiKey))
+        .filter((model) => model !== configuredModel)
+        .slice(0, 3);
+      if (fallbackModels.length) {
+        for (const fallbackModel of fallbackModels) {
+          response = await requestGemini(fallbackModel, apiKey, contents);
+          if (response.status !== 404 && response.status !== 503) break;
+          await response.body?.cancel();
+        }
+      } else {
+        return NextResponse.json(
+          {
+            error: "No Gemini generateContent model is available for this API key.",
+            code: "no_available_models",
+            providerStatus: initialStatus,
+          },
+          { status: 503 },
+        );
+      }
     }
 
     if (response.status === 429) {

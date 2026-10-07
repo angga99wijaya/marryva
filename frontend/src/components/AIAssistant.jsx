@@ -32,7 +32,9 @@ export default function AIAssistant() {
       } else if (code === "api_key_forbidden") {
         setError("Akses Gemini ditolak. Periksa pembatasan API key dan pastikan Generative Language API diaktifkan untuk project Google tersebut.");
       } else if (code === "model_not_found") {
-        setError("Model Gemini tidak tersedia untuk API key ini. Periksa GEMINI_GENERATION_MODEL di environment atau hapus agar memakai model default, lalu restart server/redeploy.");
+        setError("Model Gemini yang tersedia tidak berhasil dipanggil. Pastikan Gemini API aktif untuk API key ini dan periksa Function Logs Vercel.");
+      } else if (code === "no_available_models") {
+        setError("API key ini tidak menyediakan model Gemini dengan generateContent. Periksa akses model dan status Generative Language API di project Google.");
       } else if (code === "invalid_request") {
         setError("Gemini menolak permintaan. Coba pertanyaan yang lebih singkat atau periksa konfigurasi model.");
       } else if (code === "empty_response") {
