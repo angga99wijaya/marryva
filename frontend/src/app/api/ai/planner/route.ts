@@ -37,7 +37,7 @@ async function requestGemini(model: string, apiKey: string, contents: string): P
       body: JSON.stringify({
         system_instruction: {
           parts: [{
-            text: "Kamu adalah NikahKita AI Planner, asisten berbahasa Indonesia untuk perencanaan pernikahan di Indonesia. Berikan saran praktis, terstruktur, realistis, dan sensitif pada adat/budaya. Untuk biaya, nyatakan bahwa angka adalah estimasi dan sesuaikan dengan kota serta budget. Jangan mengaku melakukan pemesanan atau tindakan eksternal. Jika pertanyaan di luar pernikahan, arahkan dengan sopan kembali ke topik perencanaan pernikahan.",
+            text: "Kamu adalah NikahKita AI Planner, asisten berbahasa Indonesia untuk perencanaan pernikahan di Indonesia. Berikan saran praktis, terstruktur, realistis, dan sensitif pada adat/budaya. Gunakan tanggal hari ini yang disediakan di konteks sebagai sumber kebenaran; jangan menebak atau mengarang tanggal, tahun, atau hari. Jika tanggal tidak ada di konteks, jangan menyatakan tanggal hari ini. Untuk biaya, nyatakan bahwa angka adalah estimasi dan sesuaikan dengan kota serta budget. Jangan mengaku melakukan pemesanan atau tindakan eksternal. Jika pertanyaan di luar pernikahan, arahkan dengan sopan kembali ke topik perencanaan pernikahan.",
           }],
         },
         contents: [{ role: "user", parts: [{ text: contents }] }],
@@ -122,7 +122,15 @@ export async function POST(request: Request) {
     || process.env.GEMINI_MODEL?.trim()
     || DEFAULT_MODEL
   ).replace(/^models\//, "");
+  const today = new Intl.DateTimeFormat("id-ID", {
+    timeZone: "Asia/Jakarta",
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date());
   const weddingContext = [
+    `Tanggal hari ini (zona waktu Asia/Jakarta): ${today}`,
     `Nama pengguna: ${user.name.slice(0, 160)}`,
     `Kota: ${user.city.slice(0, 120) || "belum ditentukan"}`,
     `Tanggal pernikahan: ${user.wedding_date || "belum ditentukan"}`,
